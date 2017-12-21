@@ -1,19 +1,22 @@
 package com.tmdbcodlab.android.ui.movies
 
+import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
+import com.tmdbcodlab.android.R
 
 /**
  * Created by ronelg on 12/19/17.
  */
-class MoviesActivity : AppCompatActivity(), MoviesContract.View {
+class MoviesActivity : AppCompatActivity() {
 
-    override var presenter: MoviesContract.Presenter?
-        get() = TODO(
-                "not implemented") //To change initializer of created properties use File | Settings | File Templates.
-        set(value) {}
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_movies)
 
-    override fun setLoadingIndicator(active: Boolean) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        supportFragmentManager.beginTransaction()
+                .replace(R.id.fragContainer, MoviesFragment.newInstance(), MoviesFragment::class.java.simpleName)
+                .commit()
     }
 
 }
