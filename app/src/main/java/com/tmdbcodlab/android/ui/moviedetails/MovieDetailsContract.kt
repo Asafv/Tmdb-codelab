@@ -1,7 +1,15 @@
 package com.tmdbcodlab.android.ui.moviedetails
 
-/**
- * Created by ronelg on 12/19/17.
- */
+import com.tikalk.mobileevent.mobileevent.BasePresenter
+import com.tikalk.mobileevent.mobileevent.BaseView
+
 interface MovieDetailsContract {
+
+    interface View : BaseView<Presenter> {
+
+    }
+
+    interface Presenter : BasePresenter {
+
+    }
 }

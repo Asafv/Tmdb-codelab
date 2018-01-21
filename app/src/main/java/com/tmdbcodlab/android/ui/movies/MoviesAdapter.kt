@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import com.bumptech.glide.Glide
 import com.github.ajalt.timberkt.d
+import com.tmdbcodlab.android.MovieUtils
 import com.tmdbcodlab.android.R
 import com.tmdbcodlab.android.api.TmdbService
 import com.tmdbcodlab.android.io.Movie
@@ -21,6 +21,8 @@ class MoviesAdapter(private val movies: MutableList<Movie>)
 
     interface MoviesAdapterListener {
         fun onBottomReached()
+
+        fun onMovieClicked(movie: Movie)
     }
 
     fun setMoviesAdapterListener(listener: MoviesAdapterListener) {
@@ -38,6 +40,8 @@ class MoviesAdapter(private val movies: MutableList<Movie>)
         if (position == itemCount - 1) {
             moviesAdapterListener.onBottomReached()
         }
+
+        holder.itemView.setOnClickListener({ moviesAdapterListener.onMovieClicked(movies[position]) })
 
         d { "itemCount: $itemCount" }
         d { "position: $position" }
@@ -61,16 +65,9 @@ class MoviesAdapter(private val movies: MutableList<Movie>)
     class MovieViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
         private var ivPoster: ImageView = itemView!!.findViewById(R.id.ivPoster)
 
-//        private var tvTitle: TextView = itemView!!.findViewById(R.id.tvTitle)
         fun bind(movie: Movie) {
-//            tvTitle.text = movie.title
-
-            Glide.with(ivPoster)
-                    .load(TmdbService.POSTER_URL + movie.poster_path)
-                    .into(ivPoster)
-
+            MovieUtils.loadMoviePoster(ivPoster, TmdbService.POSTER_URL + movie.poster_path)
         }
-
     }
 }
 

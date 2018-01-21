@@ -1,5 +1,6 @@
 package com.tmdbcodlab.android.ui.movies
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
@@ -10,16 +11,16 @@ import android.widget.TextView
 import com.github.ajalt.timberkt.d
 import com.tmdbcodlab.android.R
 import com.tmdbcodlab.android.io.Movie
+import com.tmdbcodlab.android.ui.moviedetails.MovieDetailActivity
 
 /**
  * Created by AsafV on 21/12/2017.
  */
 class MoviesFragment : Fragment(), MoviesContract.View, MoviesAdapter.MoviesAdapterListener {
-
     // Members
     private lateinit var mPresenter: MoviesPresenter
-    private var mMoviesAdapter: MoviesAdapter? = null
 
+    private var mMoviesAdapter: MoviesAdapter? = null
     // Views
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var rvMovies: RecyclerView
@@ -46,12 +47,12 @@ class MoviesFragment : Fragment(), MoviesContract.View, MoviesAdapter.MoviesAdap
         return root
     }
 
-
-
     private fun initRecyclerView() {
         rvMovies.setHasFixedSize(true)
         rvMovies.layoutManager = GridLayoutManager(context, 2)
     }
+
+
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
 //        super.onCreateOptionsMenu(menu, inflater)
@@ -62,6 +63,7 @@ class MoviesFragment : Fragment(), MoviesContract.View, MoviesAdapter.MoviesAdap
         when (item!!.itemId) {
             R.id.menu_now_playing -> {
                 d { "menu_now_playing" }
+                activity!!.title = "Now Playing Movies"
                 mMoviesAdapter = null
                 mPresenter.loadMovies(Movie.TYPE_NOW_PLAYING, page = 1, forceUpdate = true)
                 return true
@@ -69,6 +71,7 @@ class MoviesFragment : Fragment(), MoviesContract.View, MoviesAdapter.MoviesAdap
 
             R.id.menu_popular -> {
                 d { "menu_popular" }
+                activity!!.title = "Popular Movies"
                 mMoviesAdapter = null
                 mPresenter.loadMovies(Movie.TYPE_POPULAR, page = 1, forceUpdate = true)
                 return true
@@ -76,6 +79,7 @@ class MoviesFragment : Fragment(), MoviesContract.View, MoviesAdapter.MoviesAdap
 
             R.id.menu_top_rated -> {
                 d { "menu_top_rated" }
+                activity!!.title = "Top Rated Movies"
                 mMoviesAdapter = null
                 mPresenter.loadMovies(Movie.TYPE_TOP_RATED, page = 1, forceUpdate = true)
                 return true
@@ -83,6 +87,7 @@ class MoviesFragment : Fragment(), MoviesContract.View, MoviesAdapter.MoviesAdap
 
             R.id.menu_upcoming -> {
                 d { "menu_upcoming" }
+                activity!!.title = "Upcoming Movies"
                 mMoviesAdapter = null
                 mPresenter.loadMovies(Movie.TYPE_UPCOMING, page = 1, forceUpdate = true)
                 return true
@@ -105,6 +110,14 @@ class MoviesFragment : Fragment(), MoviesContract.View, MoviesAdapter.MoviesAdap
     override fun onBottomReached() {
         d { "onBottomReached" }
         mPresenter.loadMovies(null, null, false)
+    }
+
+    override fun onMovieClicked(movie: Movie) {
+        d { "onMovieClicked: $movie" }
+        val intent = Intent(context, MovieDetailActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        intent.putExtra("movie", movie)
+        startActivity(intent)
     }
 
     override fun setPresenter(presenter: MoviesContract.Presenter) {

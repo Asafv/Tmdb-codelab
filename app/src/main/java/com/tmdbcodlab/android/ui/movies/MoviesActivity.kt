@@ -14,9 +14,10 @@ class MoviesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movies)
 
+        title = "Now Playing Movies"
+
         supportFragmentManager.beginTransaction()
                 .replace(R.id.fragContainer, MoviesFragment.newInstance(), MoviesFragment::class.java.simpleName)
                 .commit()
     }
-
 }
