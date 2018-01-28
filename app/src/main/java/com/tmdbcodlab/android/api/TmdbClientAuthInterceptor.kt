@@ -4,9 +4,6 @@ import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
 
-/**
- * Created by AsafV on 21/12/2017.
- */
 internal class TmdbClientAuthInterceptor(private val apiKey: String) : Interceptor {
 
     @Throws(IOException::class)

@@ -1,12 +1,11 @@
 package com.tmdbcodlab.android.data.source
 
 import com.tmdbcodlab.android.io.Movie
+import com.tmdbcodlab.android.io.MovieDetails
 import com.tmdbcodlab.android.io.MoviesResult
+import com.tmdbcodlab.android.io.Trailer
 import io.reactivex.Flowable
 
-/**
- * Created by ronelg on 12/19/17.
- */
 interface TmdbDataSource {
 
     fun getNowPlayingMovies(page: Int = 1): Flowable<MutableList<Movie>>
@@ -17,9 +16,7 @@ interface TmdbDataSource {
 
     fun getTopRatedMovies(page: Int = 1): Flowable<MutableList<Movie>>
 
-//    val popularMovies: Flowable<MutableList<Movie>>?
+    fun getMovieDetails(movieId: Int): Flowable<MovieDetails>
 
-//    val upcomingMovies: Flowable<MutableList<Movie>>?
-
-//    val topRatedMovies: Flowable<MutableList<Movie>>?
+    fun getMovieTrailers(movieId: Int): Flowable<Trailer>
 }

@@ -5,15 +5,17 @@ import com.github.ajalt.timberkt.e
 import com.tmdbcodlab.android.data.TmdbRepository
 import com.tmdbcodlab.android.io.Movie
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-/**
- * Created by ronelg on 12/19/17.
- */
 class MoviesPresenter(fragView: MoviesContract.View) : MoviesContract.Presenter {
 
     private var mTmdbRepo: TmdbRepository
     private var mFragView: MoviesContract.View = fragView
+
+    private var mMoviesDisposable: Disposable? = null
+    private var mCompositeDisposable = CompositeDisposable()
 
     private var mType: Int = Movie.TYPE_NOW_PLAYING // default type
     private var mPage: Int = 1
@@ -30,7 +32,7 @@ class MoviesPresenter(fragView: MoviesContract.View) : MoviesContract.Presenter 
     }
 
     override fun unsubscribe() {
-
+        mCompositeDisposable.clear()
     }
 
 
@@ -45,7 +47,7 @@ class MoviesPresenter(fragView: MoviesContract.View) : MoviesContract.Presenter 
 
         when (mType) {
             Movie.TYPE_NOW_PLAYING -> {
-                mTmdbRepo.getNowPlayingMovies(mPage)
+                mMoviesDisposable = mTmdbRepo.getNowPlayingMovies(mPage)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.io())
                         .doOnError { t -> e { "getNowPlayingMovies onError: $t" } }
@@ -57,7 +59,7 @@ class MoviesPresenter(fragView: MoviesContract.View) : MoviesContract.Presenter 
             }
 
             Movie.TYPE_TOP_RATED -> {
-                mTmdbRepo.getTopRatedMovies(mPage)
+                mMoviesDisposable = mTmdbRepo.getTopRatedMovies(mPage)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.io())
                         .doOnError { t -> e { "getTopRatedMovies onError: $t" } }
@@ -69,7 +71,7 @@ class MoviesPresenter(fragView: MoviesContract.View) : MoviesContract.Presenter 
             }
 
             Movie.TYPE_POPULAR -> {
-                mTmdbRepo.getPopularMovies(mPage)
+                mMoviesDisposable = mTmdbRepo.getPopularMovies(mPage)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.io())
                         .doOnError { t -> e { "getPopularMovies onError: $t" } }
@@ -81,7 +83,7 @@ class MoviesPresenter(fragView: MoviesContract.View) : MoviesContract.Presenter 
             }
 
             Movie.TYPE_UPCOMING -> {
-                mTmdbRepo.getUpcomingMovies(mPage)
+                mMoviesDisposable = mTmdbRepo.getUpcomingMovies(mPage)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.io())
                         .doOnError { t -> e { "getUpcomingMovies onError: $t" } }
@@ -92,5 +94,6 @@ class MoviesPresenter(fragView: MoviesContract.View) : MoviesContract.Presenter 
                         }
             }
         }
+        mCompositeDisposable.add(mMoviesDisposable!!)
     }
 }

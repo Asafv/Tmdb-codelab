@@ -11,11 +11,21 @@ import com.tmdbcodlab.android.MovieUtils
 import com.tmdbcodlab.android.R
 import com.tmdbcodlab.android.api.TmdbService
 import com.tmdbcodlab.android.io.Movie
+import com.tmdbcodlab.android.io.MovieDetails
+import com.tmdbcodlab.android.io.Trailer
 import java.util.*
 
 class MovieDetailFragment : Fragment(), MovieDetailsContract.View {
+    override fun updateMovieDetails(movieDetails: MovieDetails) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun updateMovieTrailers(it: Trailer) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     private lateinit var mMovie: Movie
+    private lateinit var mPresenter: MovieDetailsContract.Presenter
 
     // Views
     private lateinit var tvReleaseDate: TextView
@@ -43,6 +53,16 @@ class MovieDetailFragment : Fragment(), MovieDetailsContract.View {
         return root
     }
 
+    override fun onResume() {
+        super.onResume()
+        mPresenter.subscribe()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mPresenter.unsubscribe()
+    }
+
     private fun initViews(root: View) {
         tvReleaseDate = root.findViewById(R.id.tvReleaseDate)
         tvReleaseDate.text = mMovie.release_date
@@ -62,13 +82,13 @@ class MovieDetailFragment : Fragment(), MovieDetailsContract.View {
     }
 
     override fun setPresenter(presenter: MovieDetailsContract.Presenter) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        mPresenter = presenter
     }
 
     companion object {
-        fun newInstance(args: Bundle): MovieDetailFragment {
+        fun newInstance(/*args: Bundle*/): MovieDetailFragment {
             val frag = MovieDetailFragment()
-            frag.arguments = args
+//            frag.arguments = args
             return frag
         }
     }

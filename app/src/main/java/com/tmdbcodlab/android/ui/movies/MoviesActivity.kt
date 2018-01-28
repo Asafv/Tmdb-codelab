@@ -5,9 +5,6 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import com.tmdbcodlab.android.R
 
-/**
- * Created by ronelg on 12/19/17.
- */
 class MoviesActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,8 +13,12 @@ class MoviesActivity : AppCompatActivity() {
 
         title = "Now Playing Movies"
 
+        val moviesFrag = MoviesFragment.newInstance()
         supportFragmentManager.beginTransaction()
-                .replace(R.id.fragContainer, MoviesFragment.newInstance(), MoviesFragment::class.java.simpleName)
+                .replace(R.id.fragContainer, moviesFrag, MoviesFragment::class.java.simpleName)
                 .commit()
+
+        // create the presenter
+        MoviesPresenter(moviesFrag)
     }
 }

@@ -10,9 +10,6 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
-/**
- * Created by ronelg on 12/19/17.
- */
 class TmdbApi {
 
     private var mApi: TmdbService? = null

@@ -5,13 +5,23 @@ import com.tmdbcodlab.android.api.TmdbApi
 import com.tmdbcodlab.android.api.TmdbService
 import com.tmdbcodlab.android.data.source.TmdbDataSource
 import com.tmdbcodlab.android.io.Movie
+import com.tmdbcodlab.android.io.MovieDetails
+import com.tmdbcodlab.android.io.Trailer
 import io.reactivex.Flowable
 
-/**
- * Created by ronelg on 12/19/17.
- */
 class TmdbRemoteDataSource : TmdbDataSource {
+
     private val mTmdbService: TmdbService = TmdbApi.instance.tmdbService!!
+
+    override fun getMovieDetails(movieId: Int): Flowable<MovieDetails> {
+        return mTmdbService.getMovieDetails(movieId)
+                .flatMap { return@flatMap Flowable.fromCallable { it } }
+    }
+
+    override fun getMovieTrailers(movieId: Int): Flowable<Trailer> {
+        return mTmdbService.getMovieTrailers(movieId)
+                .flatMap { return@flatMap Flowable.fromCallable { it } }
+    }
 
     override fun getNowPlayingMovies(page: Int): Flowable<MutableList<Movie>> {
         d { "getting nowPlayingMovies..." }

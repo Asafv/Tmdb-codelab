@@ -17,9 +17,8 @@ import com.tmdbcodlab.android.ui.moviedetails.MovieDetailActivity
  * Created by AsafV on 21/12/2017.
  */
 class MoviesFragment : Fragment(), MoviesContract.View, MoviesAdapter.MoviesAdapterListener {
-    // Members
-    private lateinit var mPresenter: MoviesPresenter
 
+    private lateinit var mPresenter: MoviesContract.Presenter
     private var mMoviesAdapter: MoviesAdapter? = null
     // Views
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
@@ -29,13 +28,10 @@ class MoviesFragment : Fragment(), MoviesContract.View, MoviesAdapter.MoviesAdap
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-
-        mPresenter = MoviesPresenter(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.fragment_movies, container, false)
-
         d { "onCreateView" }
 
         swipeRefreshLayout = root.findViewById(R.id.swipeRefreshLayout)
@@ -51,8 +47,6 @@ class MoviesFragment : Fragment(), MoviesContract.View, MoviesAdapter.MoviesAdap
         rvMovies.setHasFixedSize(true)
         rvMovies.layoutManager = GridLayoutManager(context, 2)
     }
-
-
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
 //        super.onCreateOptionsMenu(menu, inflater)
@@ -120,10 +114,6 @@ class MoviesFragment : Fragment(), MoviesContract.View, MoviesAdapter.MoviesAdap
         startActivity(intent)
     }
 
-    override fun setPresenter(presenter: MoviesContract.Presenter) {
-        mPresenter = presenter as MoviesPresenter
-    }
-
     override fun onMoviesLoaded(movies: MutableList<Movie>) {
         d { "onMoviesLoaded" }
         if (mMoviesAdapter == null) {
@@ -151,6 +141,10 @@ class MoviesFragment : Fragment(), MoviesContract.View, MoviesAdapter.MoviesAdap
     override fun setLoadingIndicator(active: Boolean) {
         d { "setLoadingIndicator: $active" }
         swipeRefreshLayout.isRefreshing = active
+    }
+
+    override fun setPresenter(presenter: MoviesContract.Presenter) {
+        mPresenter = presenter
     }
 
     companion object {

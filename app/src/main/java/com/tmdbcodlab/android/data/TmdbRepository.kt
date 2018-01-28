@@ -4,15 +4,22 @@ import com.tmdbcodlab.android.data.source.TmdbDataSource
 import com.tmdbcodlab.android.data.source.local.TmdbLocalDataSource
 import com.tmdbcodlab.android.data.source.remote.TmdbRemoteDataSource
 import com.tmdbcodlab.android.io.Movie
+import com.tmdbcodlab.android.io.MovieDetails
+import com.tmdbcodlab.android.io.Trailer
 import io.reactivex.Flowable
 
-/**
- * Created by ronelg on 12/19/17.
- */
 class TmdbRepository: TmdbDataSource {
 
     var local : TmdbDataSource = TmdbLocalDataSource()
     var remote : TmdbDataSource = TmdbRemoteDataSource()
+
+    override fun getMovieDetails(movieId: Int): Flowable<MovieDetails> {
+        return remote.getMovieDetails(movieId)
+    }
+
+    override fun getMovieTrailers(movieId: Int): Flowable<Trailer> {
+        return remote.getMovieTrailers(movieId)
+    }
 
     override fun getNowPlayingMovies(page: Int): Flowable<MutableList<Movie>> {
         return remote.getNowPlayingMovies(page)
@@ -30,24 +37,6 @@ class TmdbRepository: TmdbDataSource {
         return remote.getTopRatedMovies(page)
     }
 
-
-//    override val popularMovies: Flowable<MutableList<Movie>>?
-//        get() {
-//            // TODO add local check here
-//            return remote.popularMovies
-//        }
-
-//    override val upcomingMovies: Flowable<MutableList<Movie>>?
-//        get() {
-//            // TODO add local check here
-//            return remote.upcomingMovies
-//        }
-
-//    override val topRatedMovies: Flowable<MutableList<Movie>>?
-//        get() {
-//            // TODO add local check here
-//            return remote.topRatedMovies
-//        }
 
     companion object {
 

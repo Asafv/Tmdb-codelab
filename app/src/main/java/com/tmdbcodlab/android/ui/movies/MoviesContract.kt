@@ -4,9 +4,6 @@ import com.tikalk.mobileevent.mobileevent.BasePresenter
 import com.tikalk.mobileevent.mobileevent.BaseView
 import com.tmdbcodlab.android.io.Movie
 
-/**
- * Created by ronelg on 12/19/17.
- */
 interface MoviesContract {
 
     interface View : BaseView<Presenter> {
