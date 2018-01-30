@@ -48,8 +48,8 @@ interface TmdbService {
         const val POSTER_URL = "http://image.tmdb.org/t/p/w185/"
         const val API_KEY = "b331218ddcbd128634135abf7673fab5"
 
-        const val MOVIE_DETAILS = "movie/{movie_id}"
-        const val MOVIE_TRAILERS = "movie/{movie_id}/videos"
+        const val MOVIE_DETAILS = "{movie_id}"
+        const val MOVIE_TRAILERS = "{movie_id}/videos"
         const val NOW_PLAYING = "now_playing"
         const val POPULAR = "popular"
         const val TOP_RATED = "top_rated"

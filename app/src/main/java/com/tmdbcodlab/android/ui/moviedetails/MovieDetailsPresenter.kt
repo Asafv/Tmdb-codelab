@@ -9,31 +9,30 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-class MovieDetailsPresenter(private val mView: MovieDetailsContract.View, private val mMovie: Movie)
+class MovieDetailsPresenter(private val mView: MovieDetailsContract.View,
+                            private val mMovie: Movie,
+                            private val mTmdbRepo: TmdbRepository)
     : MovieDetailsContract.Presenter {
 
-    private var mTmdbRepo: TmdbRepository
     private var mCompositeDisposable = CompositeDisposable()
-    private var mDetailsDisposable: Disposable? = null
-    private var mTrailersDisposable: Disposable? = null
 
     init {
         mView.setPresenter(this)
-        mTmdbRepo = TmdbRepository.instance
+        mView.setSelectedMovie(mMovie)
     }
 
     override fun subscribe() {
         // get movie details
-        mDetailsDisposable = mTmdbRepo.getMovieDetails(mMovie.id)
+        val detailsDisposable = mTmdbRepo.getMovieDetails(mMovie.id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .doOnError { run { "getMovieDetails ERR: $it" } }
+                .doOnError { e { "getMovieDetails ERR: $it" } }
                 .subscribe {
                     d { "getMovieDetails onNext: $it" }
                     mView.updateMovieDetails(it)
                 }
 
-        mTrailersDisposable = mTmdbRepo.getMovieTrailers(mMovie.id)
+        val trailersDisposable = mTmdbRepo.getMovieTrailers(mMovie.id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .doOnError { e { "TgetMovieTrailers, ERR:  $it" } }
@@ -42,7 +41,8 @@ class MovieDetailsPresenter(private val mView: MovieDetailsContract.View, privat
                     mView.updateMovieTrailers(it)
                 }
 
-        mCompositeDisposable.add(mDetailsDisposable!!)
+        mCompositeDisposable.add(detailsDisposable!!)
+        mCompositeDisposable.add(trailersDisposable!!)
     }
 
     override fun unsubscribe() {

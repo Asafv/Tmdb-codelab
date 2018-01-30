@@ -11,7 +11,7 @@ import android.widget.TextView
 import com.github.ajalt.timberkt.d
 import com.tmdbcodlab.android.R
 import com.tmdbcodlab.android.io.Movie
-import com.tmdbcodlab.android.ui.moviedetails.MovieDetailActivity
+import com.tmdbcodlab.android.ui.moviedetails.MovieDetailsActivity
 
 /**
  * Created by AsafV on 21/12/2017.
@@ -41,11 +41,6 @@ class MoviesFragment : Fragment(), MoviesContract.View, MoviesAdapter.MoviesAdap
         initRecyclerView()
 
         return root
-    }
-
-    private fun initRecyclerView() {
-        rvMovies.setHasFixedSize(true)
-        rvMovies.layoutManager = GridLayoutManager(context, 2)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -108,7 +103,7 @@ class MoviesFragment : Fragment(), MoviesContract.View, MoviesAdapter.MoviesAdap
 
     override fun onMovieClicked(movie: Movie) {
         d { "onMovieClicked: $movie" }
-        val intent = Intent(context, MovieDetailActivity::class.java)
+        val intent = Intent(context, MovieDetailsActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         intent.putExtra("movie", movie)
         startActivity(intent)
@@ -145,6 +140,11 @@ class MoviesFragment : Fragment(), MoviesContract.View, MoviesAdapter.MoviesAdap
 
     override fun setPresenter(presenter: MoviesContract.Presenter) {
         mPresenter = presenter
+    }
+
+    private fun initRecyclerView() {
+        rvMovies.setHasFixedSize(true)
+        rvMovies.layoutManager = GridLayoutManager(context, 2)
     }
 
     companion object {
